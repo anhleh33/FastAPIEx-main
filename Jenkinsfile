@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t ckdevopsn1/fastapi .'
+        sh 'docker build -t ckdevops/fastapi .'
       }
     }
     stage('Login') {
@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh 'docker push ckdevopsn1/fastapi'
+        sh 'docker push ckdevops/fastapi'
       }
     }
   }
