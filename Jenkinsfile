@@ -7,6 +7,14 @@ pipeline {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
   }
   stages {
+    stage('SonarQube Analysis') {
+      steps {
+        dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
+          sh '/home/anhhoang3/sonar-scanner/bin/sonar-scanner'
+        }
+      }
+    }
+    
     stage('Build') {
       steps {
         sh 'docker build -t anhhoang499/fastapi .'
