@@ -8,7 +8,7 @@ client = TestClient(app)
 def test_read_main():
     response = client.get('/')
     assert response.status_code == 200
-    assert response.json() == {'message': 'Fast API in Python'}
+    assert response.json() == {'message': 'Welcome you to CK_DevOps'}
 
 
 def test_read_user():
@@ -39,7 +39,7 @@ def test_create_answer():
     body = {"user_id": 1, "answers": [{"question_id": 1, "alternative_id": 2}, {
         "question_id": 2, "alternative_id": 2}, {"question_id": 2, "alternative_id": 2}]}
     body = json.dumps(body)
-    response = client.post('/answer', data=body)
+    response = client.post('/answer', json=json.loads(body))
     assert response.status_code == 201
 
 
