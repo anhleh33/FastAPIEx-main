@@ -1,4 +1,4 @@
-# fastapi-example [![CircleCI](https://circleci.com/gh/marciovrl/fastapi-example.svg?style=svg)](https://circleci.com/gh/marciovrl/fastapi-example)
+# fastapi-example 
 
 A simple example of using Fast API in Python.
 
@@ -23,7 +23,7 @@ uvicorn app.main:app --reload
 ### Run test
 
 ```
-pytest app/test.py
+pytest test/test.py
 ```
 
 ## Run with docker
