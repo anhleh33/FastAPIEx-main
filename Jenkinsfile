@@ -13,12 +13,7 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
         dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
-          sh '''
-            /home/anhhoang3/sonar-scanner/bin/sonar-scanner \
-              -Dsonar.projectKey=your_project_key \
-              -Dsonar.host.url=http://your-sonarqube-server:9000 \
-              -Dsonar.login=your_sonar_token
-          '''
+          sh '/home/anhhoang3/sonar-scanner/bin/sonar-scanner'
         }
       }
     }
