@@ -14,7 +14,8 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
         dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
-          sh '/home/anhhoang3/sonar-scanner/bin/sonar-scanner'
+          sh 'whoami'
+          sh '/home/anhhoang3/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner'
         }
       }
     }
