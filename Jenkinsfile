@@ -7,12 +7,19 @@ pipeline {
 
   environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')  // Jenkins credentials ID
+    SONAR_TOKEN = credentials('sonar-token')
   }
 
   stages {
     stage('SonarQube Analysis') {
       steps {
-      sh '/opt/sonar-scanner/bin/sonar-scanner'
+        sh """
+          /opt/sonar-scanner/bin/sonar-scanner \
+            -Dsonar.projectKey=FastAPI \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=http://172.212.93.226:9000 \
+            -Dsonar.login=${SONAR_TOKEN}
+        """
       }
     }
 
