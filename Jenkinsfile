@@ -12,9 +12,7 @@ pipeline {
   stages {
     stage('SonarQube Analysis') {
       steps {
-        dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
-          sh '/home/anhhoang3/sonar-scanner/bin/sonar-scanner'
-        }
+      sh '/opt/sonar-scanner/bin/sonar-scanner'
       }
     }
 
