@@ -14,7 +14,6 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
         dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
-          sh 'whoami'
           sh '/home/anhhoang3/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner'
         }
       }
@@ -43,7 +42,7 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          withCredentials([sshUserPrivateKey(credentialsId: 'your-ssh-credentials-id', keyFileVariable: 'SSH_KEY')]) {
+          withCredentials([sshUserPrivateKey(credentialsId: 'deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
               sh """
                   ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu2@172.171.243.226 << 'EOF'
                   docker pull anhhoang499/fastapi
