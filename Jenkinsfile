@@ -42,15 +42,26 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        sh """
-        echo "Deploying application..."
-        ssh ubuntu2@172.171.243.226
-        docker pull anhhoang499/fastapi:latest &&
-        docker stop fastapi || true &&
-        docker rm fastapi || true &&
-        docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
-      '
-    """
+        script {
+          // Ensure SSH host key is trusted (avoids "Host key verification failed")
+          sh '''
+            mkdir -p ~/.ssh
+            ssh-keyscan -H 172.171.243.226 >> ~/.ssh/known_hosts
+          '''
+          
+          // Run deployment commands on the remote server
+          sh '''
+            ssh -o StrictHostKeyChecking=no ubuntu2@172.171.243.226 /bin/bash << 'EOF'
+              echo "Pulling the latest Docker image..."
+              docker pull anhhoang499/fastapi:latest || exit 1
+              echo "Stopping and removing old container..."
+              docker stop fastapi || true
+              docker rm fastapi || true
+              echo "Starting new container..."
+              docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
+            EOF
+          '''
+        }
       }
     }
   }
