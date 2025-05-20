@@ -39,6 +39,18 @@ pipeline {
         sh 'docker push anhhoang499/fastapi'
       }
     }
+
+    //Deloydsawefqwqw
+    stage('Deploy') {
+      steps {
+        sh '''
+          echo "Deploying application..."
+          docker stop fastapi || true
+          docker rm fastapi || true
+          docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
+        '''
+      }
+    }
   }
 
   post {
