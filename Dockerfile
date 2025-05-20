@@ -8,7 +8,7 @@ WORKDIR /src
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-EXPOSE 5800
+EXPOSE 8000
 # copy requirements file
 COPY ./requirements.txt /src/requirements.txt
 
