@@ -10,16 +10,6 @@ pipeline {
     SONAR_TOKEN = credentials('sonar-token')
   }
 
-  stages {
-    stage('SonarQube Analysis') {
-      steps {
-        dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
-          sh 'whoami'
-          sh '/home/anhhoang3/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner'
-        }
-      }
-    }
-
     stage('Build Docker Image') {
       steps {
         sh 'docker build -t anhhoang499/fastapi .'
@@ -40,6 +30,17 @@ pipeline {
       }
     }
   }
+
+  
+  stages {
+    stage('SonarQube Analysis') {
+      steps {
+        dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
+          sh 'whoami'
+          sh '/home/anhhoang3/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner'
+        }
+      }
+    }
 
   post {
     always {
