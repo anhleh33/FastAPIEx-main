@@ -6,7 +6,7 @@ pipeline {
   }
 
   environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub')  // Jenkins credentials ID
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     SONAR_TOKEN = credentials('sonar-token')
   }
 
@@ -40,15 +40,17 @@ pipeline {
       }
     }
 
-    //Deloydsawefqwqw
     stage('Deploy') {
       steps {
-        sh '''
-          echo "Deploying application..."
-          docker stop fastapi || true
-          docker rm fastapi || true
-          docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
-        '''
+        sh """
+        echo "Deploying application..."
+        ssh ubuntu2@172.171.243.226
+        docker pull anhhoang499/fastapi:latest &&
+        docker stop fastapi || true &&
+        docker rm fastapi || true &&
+        docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
+      '
+    """
       }
     }
   }
