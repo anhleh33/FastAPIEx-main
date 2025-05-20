@@ -41,24 +41,24 @@ pipeline {
     }
 
     stage('Deploy') {
-      steps {
-        script {
-          withCredentials([sshUserPrivateKey(
-            credentialsId: 'deploy-ssh-key',
-            keyFileVariable: 'SSH_KEY',
-            usernameVariable: 'SSH_USER'
-          )]) {
-            sh """
-              ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@172.171.243.226 /bin/bash << 'EOF'
-                docker pull anhhoang499/fastapi:latest
-                docker stop fastapi || true
-                docker rm fastapi || true
-                docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
-              EOF
-            """
-          }
+        steps {
+            script {
+                withCredentials([sshUserPrivateKey(
+                    credentialsId: 'deploy-ssh-key',
+                    keyFileVariable: 'SSH_KEY',
+                    usernameVariable: 'SSH_USER'
+                )]) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@172.171.243.226 << 'ENDSSH'
+                            docker pull anhhoang499/fastapi:latest
+                            docker stop fastapi || true
+                            docker rm fastapi || true
+                            docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
+                        ENDSSH
+                    """
+                }
+            }
         }
-      }
     }
   }
 
