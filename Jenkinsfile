@@ -49,7 +49,6 @@ pipeline {
                   docker stop fastapi || true
                   docker rm fastapi || true
                   docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
-                  ENDSSH
               """
           }
         }
