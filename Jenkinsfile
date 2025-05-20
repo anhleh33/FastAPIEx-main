@@ -10,6 +10,7 @@ pipeline {
     SONAR_TOKEN = credentials('sonar-token')
   }
 
+  stages {
     stage('Build Docker Image') {
       steps {
         sh 'docker build -t anhhoang499/fastapi .'
@@ -29,10 +30,7 @@ pipeline {
         sh 'docker push anhhoang499/fastapi'
       }
     }
-  }
 
-  
-  stages {
     stage('SonarQube Analysis') {
       steps {
         dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
@@ -41,6 +39,7 @@ pipeline {
         }
       }
     }
+  }
 
   post {
     always {
