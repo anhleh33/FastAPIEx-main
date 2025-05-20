@@ -21,7 +21,7 @@ RUN set -eux \
     && pip install -r /src/requirements.txt \
     && rm -rf /root/.cache/pip
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5800"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # copy project file
 COPY . /src/
