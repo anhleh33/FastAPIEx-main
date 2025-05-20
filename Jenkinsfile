@@ -43,24 +43,20 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          // Ensure SSH host key is trusted (avoids "Host key verification failed")
-          sh '''
-            mkdir -p ~/.ssh
-            ssh-keyscan -H 172.171.243.226 >> ~/.ssh/known_hosts
-          '''
-          
-          // Run deployment commands on the remote server
-          sh '''
-            ssh -o StrictHostKeyChecking=no ubuntu2@172.171.243.226 /bin/bash << 'EOF'
-              echo "Pulling the latest Docker image..."
-              docker pull anhhoang499/fastapi:latest || exit 1
-              echo "Stopping and removing old container..."
-              docker stop fastapi || true
-              docker rm fastapi || true
-              echo "Starting new container..."
-              docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
-            EOF
-          '''
+          withCredentials([sshUserPrivateKey(
+            credentialsId: 'deploy-ssh-key',
+            keyFileVariable: 'SSH_KEY',
+            usernameVariable: 'SSH_USER'
+          )]) {
+            sh """
+              ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@172.171.243.226 /bin/bash << 'EOF'
+                docker pull anhhoang499/fastapi:latest
+                docker stop fastapi || true
+                docker rm fastapi || true
+                docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
+              EOF
+            """
+          }
         }
       }
     }
