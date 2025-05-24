@@ -8,7 +8,7 @@ client = TestClient(app)
 def test_read_main():
     response = client.get('/')
     assert response.status_code == 200
-    assert response.json() == {'message': 'Welcome you to CK_DevOps'}
+    assert response.json() == {'message': 'Welcome you to CK_DevOps 2025'}
 
 
 def test_read_user():
