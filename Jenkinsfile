@@ -45,11 +45,11 @@ pipeline {
           withCredentials([sshUserPrivateKey(credentialsId: 'deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
               sh """
                   ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu2@172.171.243.226 << 'ENDSSH'
-                  docker image prune -f
                   docker pull anhhoang499/fastapi
                   docker stop fastapi || true
                   docker rm fastapi || true
                   docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
+                  docker image prune -f
               """
           }
         }
