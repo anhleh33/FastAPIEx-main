@@ -84,18 +84,20 @@ pipeline {
   }
 
   post {
-    always {
-      sh 'docker logout'
-    }
-
-    failure {
-      echo "❌ Pipeline FAILED"
-      echo "❗ Trạng thái: ${currentBuild.currentResult}"
-      echo "🔍 Nguyên nhân lỗi: ${currentBuild.rawBuild.getLog(50).join('\n')}"
-    }
-
-    success {
-      echo "✅ Pipeline SUCCESS"
-    }
+  always {
+    sh 'docker logout'
   }
+
+  failure {
+    echo "❌ Pipeline FAILED"
+    echo "❗ Trạng thái: ${currentBuild.currentResult}"
+    echo "📌 Để xem chi tiết lỗi, vui lòng kiểm tra các bước bị đánh dấu đỏ trong giao diện Jenkins."
+    
+  }
+
+  success {
+    echo "✅ Pipeline SUCCESS"
+  }
+}
+
 }
