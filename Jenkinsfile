@@ -2,7 +2,8 @@ pipeline {
   agent any
 
   options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))  // Keep only the latest 5 builds
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+    timeout(time: 30, unit: 'MINUTES')  // Giới hạn toàn pipeline tối đa 30 phút
   }
 
   environment {
@@ -12,6 +13,9 @@ pipeline {
 
   stages {
     stage('SonarQube Analysis') {
+      options {
+        timeout(time: 5, unit: 'MINUTES')  // Giới hạn riêng stage này
+      }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
@@ -22,6 +26,9 @@ pipeline {
     }
 
     stage('Build Docker Image') {
+      options {
+        timeout(time: 5, unit: 'MINUTES')
+      }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh 'docker build -t anhhoang499/fastapi .'
@@ -30,14 +37,20 @@ pipeline {
     }
 
     stage('Run Tests') {
+      options {
+        timeout(time: 5, unit: 'MINUTES')
+      }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-          sh 'pytest tests/'  // Thay bằng câu lệnh test thật sự nếu có
+          sh 'pytest tests/'
         }
       }
     }
 
     stage('DockerHub Login') {
+      options {
+        timeout(time: 2, unit: 'MINUTES')
+      }
       steps {
         sh '''
           echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
@@ -46,12 +59,18 @@ pipeline {
     }
 
     stage('Push Docker Image') {
+      options {
+        timeout(time: 3, unit: 'MINUTES')
+      }
       steps {
         sh 'docker push anhhoang499/fastapi'
       }
     }
 
     stage('Deploy') {
+      options {
+        timeout(time: 5, unit: 'MINUTES')
+      }
       steps {
         script {
           withCredentials([sshUserPrivateKey(credentialsId: 'deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
@@ -75,7 +94,7 @@ pipeline {
     }
 
     failure {
-      echo '❌ Pipeline thất bại. Hãy kiểm tra các bước Code, Test hoặc Build.'
+      echo '❌ Pipeline thất bại. Có thể do timeout hoặc lỗi trong các bước Code, Test hoặc Build.'
     }
 
     success {
