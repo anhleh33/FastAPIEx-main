@@ -18,7 +18,7 @@ def test_read_user():
 
 
 def test_read_question():
-    response = client.get('/question/1')
+    response = client.get('/question/2')
     assert response.status_code == 200
     assert response.json()['position'] == 1
 
