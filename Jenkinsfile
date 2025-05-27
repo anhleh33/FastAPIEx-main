@@ -36,6 +36,17 @@ pipeline {
       }
     }
 
+    stage('Run Tests') {
+      options {
+        timeout(time: 2, unit: 'MINUTES')
+      }
+      steps {
+        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+          sh 'pytest --maxfail=1 --disable-warnings -q'
+        }
+      }
+    }
+
     stage('DockerHub Login') {
       options {
         timeout(time: 1, unit: 'MINUTES')
@@ -84,20 +95,18 @@ pipeline {
   }
 
   post {
-  always {
-    sh 'docker logout'
-  }
+    always {
+      sh 'docker logout'
+    }
 
-  failure {
-    echo "❌ Pipeline FAILED"
-    echo "❗ Trạng thái: ${currentBuild.currentResult}"
-    echo "📌 Để xem chi tiết lỗi, vui lòng kiểm tra các bước bị đánh dấu đỏ trong giao diện Jenkins."
-    
-  }
+    failure {
+      echo "❌ Pipeline FAILED"
+      echo "❗ Trạng thái: ${currentBuild.currentResult}"
+      echo "📌 Để xem chi tiết lỗi, vui lòng kiểm tra các bước bị đánh dấu đỏ trong giao diện Jenkins."
+    }
 
-  success {
-    echo "✅ Pipeline SUCCESS"
+    success {
+      echo "✅ Pipeline SUCCESS"
+    }
   }
-}
-
 }
