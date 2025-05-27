@@ -62,7 +62,6 @@ pipeline {
               docker rm fastapi || true
               docker run -d --name fastapi -p 8000:8000 anhhoang499/fastapi
               docker image prune -f
-              ENDSSH
             """
           }
         }
