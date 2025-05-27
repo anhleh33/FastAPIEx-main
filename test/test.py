@@ -33,7 +33,7 @@ def test_read_question_invalid():
 
 
 def test_read_alternatives():
-    response = client.get('/alternatives/1')
+    response = client.get('/alternatives/2')
     assert response.status_code == 200
     assert response.json()[1]['question_id'] == 1
 
