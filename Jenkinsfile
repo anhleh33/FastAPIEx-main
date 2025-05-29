@@ -39,6 +39,13 @@ pipeline {
       }
     }
 
+    stage('Run Tests') {
+      steps {
+        // Nếu pytest thất bại, pipeline sẽ dừng tại đây
+        sh 'pytest --maxfail=1 --disable-warnings -q'
+      }
+    }
+
     stage('Deploy') {
       steps {
         script {
