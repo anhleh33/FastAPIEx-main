@@ -19,6 +19,12 @@ pipeline {
       }
     }
     
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t anhhoang499/fastapi .'
+      }
+    }
+
     stage('DockerHub Login') {
       steps {
         sh '''
@@ -27,11 +33,9 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
+    stage('Push Docker Image') {
       steps {
-        echo 'Starting build Docker image...'
-        sh 'docker build -t anhhoang499/fastapi .'
-        echo 'Built Docker image.'
+        sh 'docker push anhhoang499/fastapi'
       }
     }
 
