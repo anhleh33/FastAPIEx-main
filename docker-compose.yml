@@ -20,10 +20,13 @@ services:
       - POSTGRES_PASSWORD=fastapi
       - POSTGRES_DB=fastapi
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
 volumes:
   postgres_data:
-
-scrape_configs:
-  - job_name: 'jenkins'
-    static_configs:
-      - targets: ['172.212.93.226:8080/']
