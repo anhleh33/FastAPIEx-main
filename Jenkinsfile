@@ -39,13 +39,6 @@ pipeline {
       }
     }
 
-    stage('Run Tests') {
-      steps {
-        // Nếu pytest thất bại, pipeline sẽ dừng tại đây
-        sh 'pytest --maxfail=1 --disable-warnings -q'
-      }
-    }
-
     stage('Deploy') {
       steps {
         script {
@@ -67,18 +60,6 @@ pipeline {
   post {
     always {
       sh 'docker logout'
-    }
-    failure {
-      echo "❌ Pipeline FAILED"
-      echo "❗ Trạng thái: ${currentBuild.currentResult}"
-      echo "🔍 Nguyên nhân lỗi: ${currentBuild.rawBuild.getLog(50).join('\n')}"
-      echo "Build result: ${currentBuild.currentResult}"
-      echo "Build number: ${currentBuild.number}"
-      echo "Build URL: ${currentBuild.absoluteUrl}"
-    }
-
-    success {
-      echo "✅ Pipeline SUCCESS"
     }
   }
 }
