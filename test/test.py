@@ -18,7 +18,7 @@ def test_read_user():
 
 
 def test_read_question():
-    response = client.get('/question/2')
+    response = client.get('/question/1')
     assert response.status_code == 200
     data = response.json()
     assert 'position' in data, f"Key 'position' not found in response: {data}"
@@ -33,7 +33,7 @@ def test_read_question_invalid():
 
 
 def test_read_alternatives():
-    response = client.get('/alternatives/4')
+    response = client.get('/alternatives/1')
     assert response.status_code == 200
     assert response.json()[1]['question_id'] == 1
 
