@@ -19,17 +19,19 @@ pipeline {
       }
     }
     
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t anhhoang499/fastapi .'
-      }
-    }
-
     stage('DockerHub Login') {
       steps {
         sh '''
           echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
         '''
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        echo 'Starting build Docker image...'
+        sh 'docker build -t anhhoang499/fastapi .'
+        echo 'Built Docker image.'
       }
     }
 
