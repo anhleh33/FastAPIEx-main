@@ -102,7 +102,7 @@ pipeline {
     failure {
       echo "❌ Pipeline FAILED"
       echo "❗ Trạng thái: ${currentBuild.currentResult}"
-      echo "📌 Để xem chi tiết lỗi, vui lòng kiểm tra các bước bị đánh dấu đỏ trong giao diện Jenkins."
+      echo "🔍 Nguyên nhân lỗi: ${currentBuild.rawBuild.getLog(50).join('\n')}"
     }
 
     success {
