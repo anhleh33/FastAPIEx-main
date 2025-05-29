@@ -68,9 +68,7 @@ pipeline {
     always {
       sh 'docker logout'
     }
-  }
-
-  failure {
+    failure {
       echo "❌ Pipeline FAILED"
       echo "❗ Trạng thái: ${currentBuild.currentResult}"
       echo "🔍 Nguyên nhân lỗi: ${currentBuild.rawBuild.getLog(50).join('\n')}"
@@ -82,4 +80,5 @@ pipeline {
     success {
       echo "✅ Pipeline SUCCESS"
     }
+  }
 }
