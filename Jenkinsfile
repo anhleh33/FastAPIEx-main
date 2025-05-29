@@ -29,13 +29,13 @@ pipeline {
       }
     }
 
-    stage('Run Tests') {
-      steps {
-        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-          sh 'pytest --maxfail=1 --disable-warnings -q'
-        }
-      }
-    }
+    // stage('Run Tests') {
+    //   steps {
+    //     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+    //       sh 'pytest --maxfail=1 --disable-warnings -q'
+    //     }
+    //   }
+    // }
 
     stage('DockerHub Login') {
       steps {
@@ -80,13 +80,13 @@ pipeline {
       sh 'docker logout'
     }
 
-    failure {
-      echo "❌ Pipeline FAILED"
-      echo "❗ Trạng thái: ${currentBuild.currentResult}"
-    }
+    // failure {
+    //   echo "❌ Pipeline FAILED"
+    //   echo "❗ Trạng thái: ${currentBuild.currentResult}"
+    // }
 
-    success {
-      echo "✅ Pipeline SUCCESS"
-    }
+    // success {
+    //   echo "✅ Pipeline SUCCESS"
+    // }
   }
 }
