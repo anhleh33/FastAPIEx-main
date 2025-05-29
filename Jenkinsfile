@@ -3,6 +3,7 @@ pipeline {
 
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
+    timeout(time: 10, unit: 'MINUTES')
   }
 
   environment {
@@ -12,6 +13,9 @@ pipeline {
 
   stages {
     stage('SonarQube Analysis') {
+      options {
+        timeout(time: 2, unit: 'MINUTES')
+      }
       steps {
         dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
@@ -22,6 +26,9 @@ pipeline {
     }
 
     stage('Build Docker Image') {
+      options {
+        timeout(time: 2, unit: 'MINUTES')
+      }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh 'docker build -t anhhoang499/fastapi .'
@@ -29,15 +36,21 @@ pipeline {
       }
     }
 
-    // stage('Run Tests') {
-    //   steps {
-    //     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-    //       sh 'pytest --maxfail=1 --disable-warnings -q'
-    //     }
-    //   }
-    // }
+    stage('Run Tests') {
+      options {
+        timeout(time: 2, unit: 'MINUTES')
+      }
+      steps {
+        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+          sh 'pytest --maxfail=1 --disable-warnings -q'
+        }
+      }
+    }
 
     stage('DockerHub Login') {
+      options {
+        timeout(time: 1, unit: 'MINUTES')
+      }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh '''
@@ -48,6 +61,9 @@ pipeline {
     }
 
     stage('Push Docker Image') {
+      options {
+        timeout(time: 2, unit: 'MINUTES')
+      }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh 'docker push anhhoang499/fastapi'
@@ -56,6 +72,9 @@ pipeline {
     }
 
     stage('Deploy') {
+      options {
+        timeout(time: 2, unit: 'MINUTES')
+      }
       steps {
         script {
           withCredentials([sshUserPrivateKey(credentialsId: 'deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
@@ -80,13 +99,17 @@ pipeline {
       sh 'docker logout'
     }
 
-    // failure {
-    //   echo "❌ Pipeline FAILED"
-    //   echo "❗ Trạng thái: ${currentBuild.currentResult}"
-    // }
+    failure {
+      echo "❌ Pipeline FAILED"
+      echo "❗ Trạng thái: ${currentBuild.currentResult}"
+      echo "🔍 Nguyên nhân lỗi: ${currentBuild.rawBuild.getLog(50).join('\n')}"
+      echo "Build result: ${currentBuild.currentResult}"
+      echo "Build number: ${currentBuild.number}"
+      echo "Build URL: ${currentBuild.absoluteUrl}"
+    }
 
-    // success {
-    //   echo "✅ Pipeline SUCCESS"
-    // }
+    success {
+      echo "✅ Pipeline SUCCESS"
+    }
   }
 }
