@@ -13,9 +13,9 @@ pipeline {
 
   stages {
     stage('SonarQube Analysis') {
-      options {
-        timeout(time: 2, unit: 'MINUTES')
-      }
+      // options {
+      //   timeout(time: 2, unit: 'MINUTES')
+      // }
       steps {
         dir('/var/lib/jenkins/workspace/CK_Devops_mbp_main') {
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
@@ -26,9 +26,9 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-      options {
-        timeout(time: 2, unit: 'MINUTES')
-      }
+      // options {
+      //   timeout(time: 2, unit: 'MINUTES')
+      // }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh 'docker build -t anhhoang499/fastapi .'
@@ -37,9 +37,9 @@ pipeline {
     }
 
     stage('Run Tests') {
-      options {
-        timeout(time: 2, unit: 'MINUTES')
-      }
+      // options {
+      //   timeout(time: 2, unit: 'MINUTES')
+      // }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh 'pytest --maxfail=1 --disable-warnings -q'
@@ -48,9 +48,9 @@ pipeline {
     }
 
     stage('DockerHub Login') {
-      options {
-        timeout(time: 1, unit: 'MINUTES')
-      }
+      // options {
+      //   timeout(time: 1, unit: 'MINUTES')
+      // }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh '''
@@ -61,9 +61,9 @@ pipeline {
     }
 
     stage('Push Docker Image') {
-      options {
-        timeout(time: 2, unit: 'MINUTES')
-      }
+      // options {
+      //   timeout(time: 2, unit: 'MINUTES')
+      // }
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           sh 'docker push anhhoang499/fastapi'
@@ -72,9 +72,9 @@ pipeline {
     }
 
     stage('Deploy') {
-      options {
-        timeout(time: 2, unit: 'MINUTES')
-      }
+      // options {
+      //   timeout(time: 2, unit: 'MINUTES')
+      // }
       steps {
         script {
           withCredentials([sshUserPrivateKey(credentialsId: 'deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
