@@ -33,14 +33,6 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
-      steps {
-        echo 'Starting build Docker image...'
-        sh 'docker build -t anhhoang499/fastapi .'
-        echo 'Built Docker image.'
-      }
-    }
-
     stage('Deploy') {
       steps {
         script {
