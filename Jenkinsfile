@@ -83,10 +83,6 @@ pipeline {
     failure {
       echo "❌ Pipeline FAILED"
       echo "❗ Trạng thái: ${currentBuild.currentResult}"
-      echo "🔍 Nguyên nhân lỗi: ${currentBuild.rawBuild.getLog(50).join('\n')}"
-      echo "Build result: ${currentBuild.currentResult}"
-      echo "Build number: ${currentBuild.number}"
-      echo "Build URL: ${currentBuild.absoluteUrl}"
     }
 
     success {
